@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COD Hub - Black Ops 7 & Plus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #ff6b00 0%, #ff0000 100%);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(255, 107, 0, 0.3);
+            animation: slideDown 0.8s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header h1 {
+            font-size: 3em;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ff6b00;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn:hover {
+            background: #ff6b00;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(255, 107, 0, 0.4);
+        }
+
+        .tab-btn.active {
+            background: #ff6b00;
+            box-shadow: 0 5px 20px rgba(255, 107, 0, 0.6);
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 107, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 107, 0, 0.3);
+            border-color: #ff6b00;
+        }
+
+        .card h2 {
+            color: #ff6b00;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .card h3 {
+            color: #ffa500;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+
+        .loadout {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ff6b00;
+        }
+
+        .loadout-title {
+            font-size: 1.3em;
+            color: #ff6b00;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .weapon-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background: rgba(255, 107, 0, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 107, 0, 0.2);
+        }
+
+        .tier-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .tier {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .tier-label {
+            padding: 20px;
+            font-size: 2em;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .tier-s .tier-label { background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; }
+        .tier-a .tier-label { background: linear-gradient(135deg, #ff6b00, #ff8c00); }
+        .tier-b .tier-label { background: linear-gradient(135deg, #00a8ff, #0077ff); }
+        .tier-c .tier-label { background: linear-gradient(135deg, #6c757d, #adb5bd); }
+
+        .tier-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px;
+            flex: 1;
+        }
+
+        .tier-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+        }
+
+        .tier-item:hover {
+            background: rgba(255, 107, 0, 0.3);
+            transform: scale(1.05);
+        }
+
+        .news-item {
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.1), rgba(255, 0, 0, 0.1));
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ff6b00;
+        }
+
+        .news-date {
+            color: #ff6b00;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            background: rgba(255, 107, 0, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #ffa500;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .season-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .season-card {
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.2), rgba(255, 0, 0, 0.2));
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #ff6b00;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .tier {
+                flex-direction: column;
+            }
+            
+            .tier-label {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 COD HUB 2025</h1>
+            <p>Votre guide complet Call of Duty - Black Ops 7 & Actualités</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('meta')">Classes Meta BO7</button>
+            <button class="tab-btn" onclick="showTab('tierlist')">Tier List Armes</button>
+            <button class="tab-btn" onclick="showTab('saison')">Saison 1</button>
+            <button class="tab-btn" onclick="showTab('futur')">Futur COD</button>
+            <button class="tab-btn" onclick="showTab('news')">Actualités</button>
+        </div>
+
+        <!-- Section Classes Meta -->
+        <div id="meta" class="content-section active">
+            <div class="card">
+                <h2>🔥 CLASSES META BLACK OPS 7 - Décembre 2025</h2>
+                
+                <div class="loadout">
+                    <div class="loadout-title">⭐ #1 META - M15 MOD 0 (Fusil d'Assaut)</div>
+                    <p><strong>Pourquoi c'est meta :</strong> Utilisé par plus de 50% des joueurs, recoil ultra-stable, TTK excellent à toutes distances</p>
+                    <h4 style="color: #ffa500; margin-top: 15px;">Configuration 5 Accessoires :</h4>
+                    <ul>
+                        <li><span class="highlight">Canon :</span> 16.5" Fusion Barrel</li>
+                        <li><span class="highlight">Bouche :</span> Redwell 5.56 Compensator</li>
+                        <li><span class="highlight">Optique :</span> Lethal Tools ELO</li>
+                        <li><span class="highlight">Poignée Arrière :</span> Hexcut Grip</li>
+                        <li><span class="highlight">Crosse :</span> Intervention Stock</li>
+                    </ul>
+                    <div class="weapon-stats">
+                        <div class="stat-item">📊 TTK : 248ms jusqu'à 25m</div>
+                        <div class="stat-item">🎯 Précision : 9.5/10</div>
+                        <div class="stat-item">⚡ Mobilité : 8/10</div>
+                    </div>
+                </div>
+
+                <div class="loadout">
+                    <div class="loadout-title">🔫 #2 META - Dravec 45 (SMG)</div>
+                    <p><strong>Pourquoi c'est meta :</strong> La SMG dominante, stabilité exceptionnelle pour une mitraillette, polyvalent courte-moyenne portée</p>
+                    <h4 style="color: #ffa500; margin-top: 15px;">Configuration Optimale :</h4>
+                    <ul>
+                        <li><span class="highlight">Bouche :</span> Hawker Hybrid .45</li>
+                        <li><span class="highlight">Canon :</span> 14" Verse Barrel</li>
+                        <li><span class="highlight">Chargeur :</span> 48 Round Extended Mag</li>
+                        <li><span class="highlight">Poignée :</span> Herald-Z1 Grip</li>
+                        <li><span class="highlight">Crosse :</span> EAM Heritage Stock</li>
+                    </ul>
+                    <div class="weapon-stats">
+                        <div class="stat-item">⚡ Mobilité : 9/10</div>
+                        <div class="stat-item">🔥 Cadence : Très Élevée</div>
+                        <div class="stat-item">🎯 TTK Close : 180ms</div>
+                    </div>
+                </div>
+
+                <div class="loadout">
+                    <div class="loadout-title">🎖️ #3 META - MXR-17 (Fusil d'Assaut)</div>
+                    <p><strong>Pourquoi c'est meta :</strong> Excellent pour tenir les couloirs, très précis, faible recoil</p>
+                    <h4 style="color: #ffa500; margin-top: 15px;">Build Recommandé :</h4>
+                    <ul>
+                        <li><span class="highlight">Bouche :</span> VAS 5.56 Suppressor</li>
+                        <li><span class="highlight">Canon :</span> 24" Assemblage Barrel</li>
+                        <li><span class="highlight">Optique :</span> Lethal Tools ELO</li>
+                        <li><span class="highlight">Poignée Avant :</span> H-Lock Foregrip</li>
+                        <li><span class="highlight">Poignée Arrière :</span> Hallux Mix Grip</li>
+                    </ul>
+                </div>
+
+                <div class="loadout">
+                    <div class="loadout-title">💥 #4 - M8A1 (Fusil Rafale)</div>
+                    <p><strong>Style :</strong> Burst rifle précis pour combats à moyenne-longue portée</p>
+                    <div class="weapon-stats">
+                        <div class="stat-item">🎯 Précision : 9/10</div>
+                        <div class="stat-item">💀 Dégâts : Très Élevés</div>
+                        <div class="stat-item">📏 Portée : Excellente</div>
+                    </div>
+                </div>
+
+                <h3>💡 Conseils Perks Meta :</h3>
+                <div class="stat-item" style="margin-top: 10px;">
+                    <strong>Combo Gagnant :</strong> Fast Hands + Dexterity + Flak Jacket
+                </div>
+                <div class="stat-item" style="margin-top: 10px;">
+                    <strong>Wildcards :</strong> Overkill (5 accessoires) ou Gunfighter (8 accessoires)
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Tier List -->
+        <div id="tierlist" class="content-section">
+            <div class="card">
+                <h2>📊 TIER LIST ARMES - BLACK OPS 7</h2>
+                <p style="margin-bottom: 20px;">Classement basé sur le taux d'utilisation, les performances en match ranked et les statistiques communautaires (Mis à jour : 5 Décembre 2025)</p>
+                
+                <div class="tier-list">
+                    <div class="tier tier-s">
+                        <div class="tier-label">S</div>
+                        <div class="tier-items">
+                            <div class="tier-item">M15 MOD 0 (AR) ⭐</div>
+                            <div class="tier-item">Dravec 45 (SMG)</div>
+                            <div class="tier-item">MXR-17 (AR)</div>
+                            <div class="tier-item">M8A1 (Marksman)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tier tier-a">
+                        <div class="tier-label">A</div>
+                        <div class="tier-items">
+                            <div class="tier-item">Peacekeeper Mk1 (AR)</div>
+                            <div class="tier-item">Ryden 45K (SMG)</div>
+                            <div class="tier-item">Razor 9mm (SMG)</div>
+                            <div class="tier-item">M10 Breacher (Shotgun)</div>
+                            <div class="tier-item">DS20 Mirage (AR)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tier tier-b">
+                        <div class="tier-label">B</div>
+                        <div class="tier-items">
+                            <div class="tier-item">Echo 12 (Shotgun)</div>
+                            <div class="tier-item">VS Recon (Sniper)</div>
+                            <div class="tier-item">MK.78 (LMG)</div>
+                            <div class="tier-item">Carbon 57 (SMG)</div>
+                            <div class="tier-item">MPC-25 (SMG)</div>
+                            <div class="tier-item">SK Shadow (Sniper)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tier tier-c">
+                        <div class="tier-label">C</div>
+                        <div class="tier-items">
+                            <div class="tier-item">CODA 9 (Pistol)</div>
+                            <div class="tier-item">Jäger 45 (Pistol)</div>
+                            <div class="tier-item">XR-3 Ion (Sniper)</div>
+                            <div class="tier-item">Velox 5.7 (Pistol)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px;">📈 Évolution Meta</h3>
+                <div class="news-item">
+                    <p><strong>Changement récent :</strong> Le M15 MOD 0 domine depuis le lancement avec 50%+ de pick rate. La Dravec 45 reste la SMG #1 incontestée en compétitif.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Saison -->
+        <div id="saison" class="content-section">
+            <div class="card">
+                <h2>🎯 SAISON 1 - BLACK OPS 7</h2>
+                <div class="news-date">📅 4 Décembre 2025 - 3 Février 2026</div>
+                
+                <div class="season-info">
+                    <div class="season-card">
+                        <h3>🗺️ Nouvelles Cartes</h3>
+                        <ul>
+                            <li>Havens Hollow (Résurgence)</li>
+                            <li>2 nouveaux POI sur Verdansk</li>
+                            <li>Avalon (Saison 2)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="season-card">
+                        <h3>🔫 Nouveautés</h3>
+                        <ul>
+                            <li>100+ récompenses Battle Pass</li>
+                            <li>Nouvelles armes</li>
+                            <li>Nouveaux opérateurs</li>
+                            <li>Système Surcharge (Overclock)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="season-card">
+                        <h3>🧟 Mode Zombies</h3>
+                        <ul>
+                            <li>Ashes of the Damned (carte)</li>
+                            <li>Retour de Richtofen, Takeo, Nikolai, Dempsey</li>
+                            <li>Véhicule Miracle disponible</li>
+                            <li>Style TranZit de BO2</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="season-card">
+                        <h3>🎮 Warzone Integration</h3>
+                        <ul>
+                            <li>Intégration complète BO7</li>
+                            <li>Nouvelles armes dans Warzone</li>
+                            <li>Ranked prévu Saison 2</li>
+                            <li>Retour de Blackout</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px;">⚡ Call of Duty League 2026</h3>
+                <div class="news-item">
+                    <div class="news-date">Début : Décembre 2025</div>
+                    <p>La CDL reprend avec Black Ops 7 ! OpTic Texas, double champion, défend son titre. Rumeur d'un événement au UK en 2026 (première fois depuis 2020).</p>
+                </div>
+
+                <h3>🏆 Récompenses Prestige</h3>
+                <div class="stat-item">
+                    <strong>Niveau 1000 :</strong> Skin secret révélé (possible teaser du prochain Treyarch COD de 2028 ?)
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Futur COD -->
+        <div id="futur" class="content-section">
+            <div class="card">
+                <h2>🔮 PROCHAINS CALL OF DUTY</h2>
+                
+                <div class="news-item">
+                    <h3>🎯 Call of Duty 2026 - Modern Warfare 사 (4)</h3>
+                    <div class="news-date">Développeur : Infinity Ward | Sortie prévue : Novembre 2026</div>
+                    <p><strong>🚨 EXCLUSIVITÉ :</strong> Setting en Corée du Sud et Corée du Nord</p>
+                    
+                    <h4 style="color: #ffa500; margin-top: 15px;">Informations confirmées :</h4>
+                    <ul>
+                        <li>🗺️ <strong>Localisation :</strong> Péninsule coréenne (Nord + Sud)</li>
+                        <li>⚔️ <strong>Factions jouables :</strong> Task Force 141, SAS, Armée de la République de Corée</li>
+                        <li>🎮 <strong>Gameplay :</strong> Mix moderne/futuriste (armes futuristes mais contexte moderne)</li>
+                        <li>👤 <strong>Antagoniste :</strong> Retour de Vladimir Makarov</li>
+                        <li>📖 <strong>Histoire :</strong> Suite directe de MW3 après la mort de Shepherd</li>
+                        <li>🎯 <strong>Objectif :</strong> Empêcher une 3ème Guerre Mondiale</li>
+                    </ul>
+                    
+                    <h4 style="color: #ffa500; margin-top: 15px;">Aspects techniques :</h4>
+                    <ul>
+                        <li>🖥️ <strong>Plateformes :</strong> PS5, Xbox Series X/S, PC, NEXT-GEN XBOX (Xbox Prime)</li>
+                        <li>❌ <strong>PAS de sortie Xbox One/PS4</strong> (première fois depuis COD Ghosts 2013)</li>
+                        <li>🎨 <strong>Moteur :</strong> Améliorations graphiques majeures</li>
+                        <li>⚙️ <strong>Développement :</strong> Kits dev next-gen Xbox</li>
+                    </ul>
+                </div>
+
+                <div class="news-item">
+                    <h3>🎮 Call of Duty 2027 - Nouvelle Franchise</h3>
+                    <div class="news-date">Développeur : Sledgehammer Games</div>
+                    <p><strong>Rumeur :</strong> Nouvelle sous-franchise originale (première depuis Vanguard 2021)</p>
+                    <ul>
+                        <li>🌍 <strong>Setting :</strong> Ère moderne/futuriste</li>
+                        <li>✨ <strong>Type :</strong> Nouveau concept, pas un MW ou BO</li>
+                        <li>❓ <strong>Status :</strong> En développement précoce</li>
+                    </ul>
+                </div>
+
+                <div class="news-item">
+                    <h3>🔥 Call of Duty 2028 - Black Ops 8 (?)</h3>
+                    <div class="news-date">Développeur : Treyarch</div>
+                    <p><strong>Possible teaser :</strong> Le skin niveau 1000 de Black Ops 7 pourrait révéler des indices (comme pour BO6)</p>
+                    <ul>
+                        <li>🤔 <strong>Théories :</strong> Setting post-apocalyptique ? Retour de Alex Mason/Hudson ?</li>
+                        <li>🧟 <strong>Ou :</strong> COD Zombies standalone ?</li>
+                        <li>⏰ <strong>Révélation :</strong> Possible avant fin 2026</li>
+                    </ul>
+                </div>
+
+                <h3 style="margin-top: 30px;">📊 Cycle de Développement</h3>
+                <div class="stat-item">
+                    <strong>Rotation classique :</strong> Infinity Ward (2026) → Sledgehammer (2027) → Treyarch (2028)
+                </div>
+                <div class="stat-item" style="margin-top: 10px;">
+                    <strong>Exception 2025 :</strong> Deux Black Ops de Treyarch consécutifs (BO6 + BO7)
+                </div>
+            </div>
+        </div>
+
+        <!-- Section News -->
+        <div id="news" class="content-section">
+            <div class="card">
+                <h2>📰 ACTUALITÉS CALL OF DUTY</h2>
+                
+                <div class="news-item">
+                    <div class="news-date">🔥 7 Décembre 2025</div>
+                    <h3>Black Ops 7 - Bilan après lancement</h3>
+                    <ul>
+                        <li>✅ <strong>Multijoueur :</strong> Très bien reçu, SBMM réduit apprécié</li>
+                        <li>⚠️ <strong>Campagne :</strong> Structure open-combat critiquée</li>
+                        <li>👍 <strong>Zombies :</strong> Bien accueilli par les fans récents</li>
+                        <li>📊 <strong>M15 MOD 0 :</strong> Domine avec 50%+ d'utilisation</li>
+                    </ul>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-date">🎯 4 Décembre 2025</div>
+                    <h3>Lancement Saison 1</h3>
+                    <p>La première saison de Black Ops 7 est officiellement lancée avec de nombreux contenus.</p>
+                    <ul>
+                        <li>Nouveau Battle Pass 100+ niveaux</li>
+                        <li>Havens Hollow (carte Résurgence)</li>
+                        <li>Système Surcharge pour équipements</li>
+                        <li>Transfert d'armes BO6 disponible</li>
+                    </ul>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-date">⚡ Novembre 2025</div>
+                    <h3>Compétitif - CDL 2026</h3>
+                    <p>La Call of Duty League reprend en décembre 2025, quelques semaines après le lancement de BO7.</p>
+                    <ul>
+                        <li>OpTic Texas défend son titre</li>
+                        <li>Compositions d'équipes en cours</li>
+                        <li>Possible événement au Royaume-Uni en 2026</li>
+                        <li>Saison 2025 : plus suivie de l'histoire</li>
+                    </ul>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-date">🚨 Juin 2025</div>
+                    <h3>Leak : Modern Warfare 사 (2026)</h3>
+                    <p>L'insider TheGhostOfHope révèle des détails sur le COD 2026 développé par Infinity Ward.</p>
+                    <ul>
+                        <li>Setting en Corée (Nord + Sud)</li>
+                        <li>Pas de sortie Xbox One/PS4</li>
+                        <li>Accompagnera la next-gen Xbox</li>
+                        <li>Retour de Makarov comme antagoniste</li>
+                    </ul>
+                </div>
+
+                <h3 style="margin-top: 30px;">🎮 Éditions Disponibles BO7</h3>
+                <div class="season-info">
+                    <div class="season-card">
+                        <h4>Standard Cross-Gen</h4>
+                        <p>Jeu de base PS5/PS4/Xbox Series/Xbox One</p>
+                        <p style="color: #ffa500;">Bonus : Défi Viktor Reznov + Camo universel</p>
+                    </div>
+                    <div class="season-card">
+                        <h4>Coffre d'Arme</h4>
+                        <p>Édition premium avec contenus exclusifs</p>
+                        <p style="color: #ffa500;">Apparences d'opérateurs retravaillées</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Masquer toutes les sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Retirer active de tous les boutons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn
